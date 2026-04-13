@@ -36,10 +36,14 @@ socket.on('log_message', (entry) => {
 
 // ── Init ───────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    // Show the Vercel alert modal immediately
+    document.getElementById('vercel-modal').classList.add('active');
+    
     fetchNetworkInfo();
     fetchReports();
     initChart();
     setupTabs();
+
     setupNavbar();
     initSimCanvas();
     setInterval(fetchReports, 10000);

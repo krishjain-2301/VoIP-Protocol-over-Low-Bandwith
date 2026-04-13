@@ -37,7 +37,7 @@
                 <a class="nav-link" href="#virtual-lab"><span class="nav-icon">🔬</span> Virtual Lab</a>
                 <button class="nav-link" onclick="openHelpModal()"><span class="nav-icon">❓</span> Help</button>
                 <button class="nav-link" onclick="openDevModal()"><span class="nav-icon">👨‍💻</span> Developed by</button>
-                <a class="nav-link nav-cta" href="/voip_project.zip" download="voip_project.zip"><span class="nav-icon">⬇️</span> Download</a>
+                <a class="nav-link nav-cta" href="https://github.com/krishjain-2301/VoIP-Protocol-over-Low-Bandwith/archive/refs/heads/main.zip" target="_blank"><span class="nav-icon">⬇️</span> Download</a>
             </div>
             <div class="nav-status">
                 <div class="ws-dot" id="ws-dot"></div>
@@ -738,6 +738,28 @@ PC B (<span class="hl">Receiver</span>)
     </div>
 
     <!-- ═══ MODALS ═══ -->
+    <!-- Vercel Alert Modal -->
+    <div class="modal-overlay" id="vercel-modal">
+        <div class="modal" style="border: 1px solid var(--accent-primary);">
+            <div class="modal-header">
+                <div class="modal-title"><span style="color: #f59e0b">⚠️</span> Notice for Live Features</div>
+                <button class="modal-close" onclick="closeModal('vercel-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:center; font-size:1.05rem; margin-bottom:16px;">
+                    This website is hosted on a serverless environment which <strong>does not support persistent WebSockets</strong> required for live audio streaming.
+                </p>
+                <p style="text-align:center; color:var(--text-muted); margin-bottom:24px;">
+                    To fully use the VoIP sender, receiver, and impairment proxy features, please download the project and run the server locally.
+                </p>
+                <div style="text-align:center; margin-bottom: 10px;">
+                    <a class="btn btn-primary" href="https://github.com/krishjain-2301/VoIP-Protocol-over-Low-Bandwith/archive/refs/heads/main.zip" style="text-decoration: none; padding: 10px 20px;">⬇️ Download Project</a>
+                    <button class="btn btn-outline" onclick="closeModal('vercel-modal')" style="padding: 10px 20px; margin-left: 12px;">Continue to UI Preview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Report Modal -->
     <div class="modal-overlay" id="report-modal">
         <div class="modal">

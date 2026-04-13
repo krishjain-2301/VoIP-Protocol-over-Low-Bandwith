@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Low-Bandwidth Emergency VoIP System — Interactive visualization of real-time voice communication over UDP with OPUS codec for smart city emergency networks.">
+    <title>Emergency VoIP System — CN Project</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <!-- ═══ BACKGROUND EFFECTS ═══ -->
+    <div class="bg-effects">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+
+        <!-- ═══════════════════════════════════════════════════
+             NAVBAR
+             ═══════════════════════════════════════════════════ -->
+        <nav class="navbar" id="navbar">
+            <a class="nav-brand" href="#hero">
+                <div class="nav-logo">📡</div>
+                <span class="nav-brand-text">VoIP Emergency</span>
+            </a>
+            <div class="nav-links">
+                <a class="nav-link active" href="#learn"><span class="nav-icon">📖</span> Learn</a>
+                <a class="nav-link" href="#simulation"><span class="nav-icon">🧪</span> Run Simulation</a>
+                <a class="nav-link" href="#dashboard"><span class="nav-icon">📊</span> Dashboard</a>
+                <a class="nav-link" href="#video"><span class="nav-icon">🎬</span> Video</a>
+                <a class="nav-link" href="#references"><span class="nav-icon">📚</span> References</a>
+                <a class="nav-link" href="#virtual-lab"><span class="nav-icon">🔬</span> Virtual Lab</a>
+                <button class="nav-link" onclick="openHelpModal()"><span class="nav-icon">❓</span> Help</button>
+                <button class="nav-link" onclick="openDevModal()"><span class="nav-icon">👨‍💻</span> Developed by</button>
+                <a class="nav-link nav-cta" href="/voip_project.zip" download="voip_project.zip"><span class="nav-icon">⬇️</span> Download</a>
+            </div>
+            <div class="nav-status">
+                <div class="ws-dot" id="ws-dot"></div>
+                <span id="ws-label">Offline</span>
+            </div>
+        </nav>
+
+        <!-- ═══════════════════════════════════════════════════
+             HERO
+             ═══════════════════════════════════════════════════ -->
+        <section class="hero" id="hero">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Computer Networks Project · Socket Programming
+            </div>
+            <h1 class="hero-title">
+                Low-Bandwidth<br><span class="gradient-text">Emergency VoIP System</span>
+            </h1>
+            <p class="hero-subtitle">
+                Real-time voice communication over UDP with OPUS codec compression,
+                adaptive jitter buffering, and network impairment simulation for
+                smart city emergency infrastructure.
+            </p>
+            <div class="hero-actions">
+                <a class="hero-btn hero-btn-primary" href="#simulation">
+                    ▶ Run Simulation
+                </a>
+                <a class="hero-btn hero-btn-outline" href="#learn">
+                    📖 Learn the Concept
+                </a>
+                <a class="hero-btn hero-btn-outline" href="#dashboard">
+                    📊 Live Dashboard
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value">6–20</div>
+                    <div class="hero-stat-label">kbps Bitrate</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">UDP</div>
+                    <div class="hero-stat-label">Transport Protocol</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">OPUS</div>
+                    <div class="hero-stat-label">Audio Codec</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">5</div>
+                    <div class="hero-stat-label">Test Scenarios</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════
+             1. CONCEPT DESCRIPTION (Learn)
+             ═══════════════════════════════════════════════════ -->
+        <section class="section" id="learn">
+            <div class="section-header">
+                <div class="section-label">Concept Description</div>
+                <h2 class="section-title">Understanding Emergency VoIP</h2>
+                <p class="section-desc">
+                    A deep dive into low-bandwidth voice communication using raw UDP sockets,
+                    OPUS codec, and adaptive network techniques.
+                </p>
+            </div>
+
+            <div class="concept-grid">
+                <!-- Card 1: Definition -->
+                <div class="concept-card">
+                    <div class="concept-icon">📡</div>
+                    <div class="concept-card-title">What is VoIP?</div>
+                    <div class="concept-card-text">
+                        Voice over Internet Protocol (VoIP) transmits voice as digital data packets
+                        over IP networks instead of traditional phone lines. In emergency scenarios,
+                        bandwidth-constrained VoIP enables critical communication when infrastructure
+                        is damaged or overloaded.
+                    </div>
+                </div>
+
+                <!-- Card 2: Step-by-step -->
+                <div class="concept-card">
+                    <div class="concept-icon">🔄</div>
+                    <div class="concept-card-title">How It Works</div>
+                    <div class="concept-card-text">
+                        <ul>
+                            <li>Microphone captures raw PCM audio (8kHz, 16-bit mono)</li>
+                            <li>OPUS encoder compresses to 6–20 kbps with DTX + FEC</li>
+                            <li>Custom header added: [seq | timestamp | codec | payload]</li>
+                            <li>UDP socket transmits packet to receiver</li>
+                            <li>Jitter buffer reorders packets, fills gaps</li>
+                            <li>OPUS decoder reconstructs audio for playback</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Card 3: Why UDP? -->
+                <div class="concept-card">
+                    <div class="concept-icon">⚡</div>
+                    <div class="concept-card-title">Why UDP Over TCP?</div>
+                    <div class="concept-card-text">
+                        TCP's retransmission delays are fatal for real-time audio. UDP provides:
+                        <ul>
+                            <li>Zero retransmission overhead — no head-of-line blocking</li>
+                            <li>Lower latency — no 3-way handshake or ACK waiting</li>
+                            <li>Custom reliability — we add our own seq numbers + FEC</li>
+                            <li>Better for lossy networks — old packets are useless for voice</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Card 4: Purpose -->
+                <div class="concept-card">
+                    <div class="concept-icon">🎯</div>
+                    <div class="concept-card-title">Purpose & Use Cases</div>
+                    <div class="concept-card-text">
+                        Designed for emergency smart city networks where bandwidth is constrained.
+                        <ul>
+                            <li>Disaster zones with damaged cellular infrastructure</li>
+                            <li>First responder communication over mesh networks</li>
+                            <li>IoT-connected emergency stations in smart cities</li>
+                            <li>Low-bandwidth satellite or radio links</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Card 5: Key Parameters -->
+                <div class="concept-card">
+                    <div class="concept-icon">📊</div>
+                    <div class="concept-card-title">Key Parameters</div>
+                    <div class="concept-card-text">
+                        <ul>
+                            <li><strong>Bitrate:</strong> 6 / 12 / 20 kbps (adaptive)</li>
+                            <li><strong>Sample Rate:</strong> 8000 Hz narrowband</li>
+                            <li><strong>Frame Size:</strong> 20ms (160 samples)</li>
+                            <li><strong>Packet Header:</strong> 15 bytes (seq + ts + codec + len)</li>
+                            <li><strong>Jitter Buffer:</strong> 60–200ms adaptive</li>
+                            <li><strong>MOS Score:</strong> 1.0–5.0 quality metric</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Card 6: Real Systems -->
+                <div class="concept-card">
+                    <div class="concept-icon">🌐</div>
+                    <div class="concept-card-title">Real-World Systems</div>
+                    <div class="concept-card-text">
+                        This design mirrors production VoIP technology:
+                        <ul>
+                            <li><strong>WebRTC:</strong> Browser-based calls (Google Meet, Discord)</li>
+                            <li><strong>SIP/RTP:</strong> Enterprise telephony protocol stack</li>
+                            <li><strong>Zoom/Teams:</strong> OPUS codec + adaptive bitrate</li>
+                            <li><strong>Amateur Radio:</strong> Codec2 over digital radio modes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════
+             2. INTERACTIVE VISUALIZATION (Simulation)
+             ═══════════════════════════════════════════════════ -->
+        <section class="section" id="simulation">
+            <div class="section-header">
+                <div class="section-label">Interactive Visualization</div>
+                <h2 class="section-title">UDP Packet Transmission Simulator</h2>
+                <p class="section-desc">
+                    Configure network parameters and watch how VoIP packets travel from sender to receiver,
+                    experiencing loss, delay, and jitter in real time.
+                </p>
+            </div>
+
+            <div class="sim-container">
+                <!-- Left: Controls -->
+                <div class="glass-card sim-controls">
+                    <div class="card-title"><span class="icon">🎛️</span> Network Parameters</div>
+
+                    <div class="sim-row">
+                        <div class="sim-field">
+                            <label class="sim-label" for="sim-packet-size">Packet Size (bytes)</label>
+                            <input class="sim-input" type="number" id="sim-packet-size" value="180" min="20" max="1500">
+                        </div>
+                        <div class="sim-field">
+                            <label class="sim-label" for="sim-tx-rate">TX Rate (pkt/s)</label>
+                            <input class="sim-input" type="number" id="sim-tx-rate" value="50" min="1" max="200">
+                        </div>
+                    </div>
+
+                    <div class="sim-row">
+                        <div class="sim-field">
+                            <label class="sim-label" for="sim-window">Window Size</label>
+                            <input class="sim-input" type="number" id="sim-window" value="10" min="1" max="50">
+                        </div>
+                        <div class="sim-field">
+                            <label class="sim-label" for="sim-loss">Packet Loss %</label>
+                            <input class="sim-input" type="number" id="sim-loss" value="5" min="0" max="100">
+                        </div>
+                    </div>
+
+                    <div class="sim-row">
+                        <div class="sim-field">
+                            <label class="sim-label" for="sim-delay">Delay (ms)</label>
+                            <input class="sim-input" type="number" id="sim-delay" value="30" min="0" max="500">
+                        </div>
+                        <div class="sim-field">
+                            <label class="sim-label" for="sim-jitter">Jitter ± (ms)</label>
+                            <input class="sim-input" type="number" id="sim-jitter" value="10" min="0" max="200">
+                        </div>
+                    </div>
+
+                    <div class="sim-field">
+                        <label class="sim-label" for="sim-bitrate">Codec Bitrate</label>
+                        <select class="sim-select" id="sim-bitrate">
+                            <option value="20000">20 kbps — High Quality</option>
+                            <option value="12000" selected>12 kbps — Medium</option>
+                            <option value="6000">6 kbps — Emergency Low</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group" style="margin-top:8px">
+                        <button class="btn btn-primary" id="btn-sim-start" onclick="startSimulation()">▶ Run</button>
+                        <button class="btn btn-outline" id="btn-sim-reset" onclick="resetSimulation()">↻ Reset</button>
+                    </div>
+                </div>
+
+                <!-- Right: Canvas -->
+                <div class="glass-card" style="padding:0;overflow:hidden">
+                    <div class="sim-canvas-wrap">
+                        <canvas id="sim-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step-by-step explanation -->
+            <div class="sim-steps glass-card" style="margin-top:24px">
+                <div class="card-title"><span class="icon">📝</span> Step-by-Step Process</div>
+                <div class="step-list" id="step-list">
+                    <div class="step-item" id="step-1">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <h4>Audio Capture</h4>
+                            <p>Microphone captures raw PCM audio at 8kHz, 16-bit mono — 160 samples per 20ms frame.</p>
+                        </div>
+                    </div>
+                    <div class="step-item" id="step-2">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <h4>OPUS Encoding</h4>
+                            <p>Raw PCM is compressed by the OPUS codec at the selected bitrate with DTX (silence suppression) and FEC (error correction).</p>
+                        </div>
+                    </div>
+                    <div class="step-item" id="step-3">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <h4>Packet Framing</h4>
+                            <p>A 15-byte custom header [seq(4B) | timestamp(8B) | codec(1B) | length(2B)] is prepended to the encoded payload.</p>
+                        </div>
+                    </div>
+                    <div class="step-item" id="step-4">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <h4>UDP Transmission</h4>
+                            <p>Packets are sent via UDP SOCK_DGRAM — no connection setup, no retransmits, minimal overhead.</p>
+                        </div>
+                    </div>
+                    <div class="step-item" id="step-5">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <h4>Network Transit (Loss, Delay, Jitter)</h4>
+                            <p>Packets traverse the network. Some are lost, others delayed or arrive out of order.</p>
+                        </div>
+                    </div>
+                    <div class="step-item" id="step-6">
+                        <div class="step-num">6</div>
+                        <div class="step-content">
+                            <h4>Jitter Buffer & Playback</h4>
+                            <p>Receiver's jitter buffer reorders packets, fills gaps with silence (PLC), then OPUS decodes to speaker.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation Output -->
+            <div class="glass-card" style="margin-top:24px">
+                <div class="card-title"><span class="icon">📋</span> Simulation Results</div>
+                <div class="sim-output" id="sim-output">
+                    <span class="out-label">Ready.</span> Configure parameters above and click <strong>Run</strong> to begin simulation.
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════
+             3. VIDEO SECTION
+             ═══════════════════════════════════════════════════ -->
+        <section class="section" id="video">
+            <div class="section-header">
+                <div class="section-label">Video Explanation</div>
+                <h2 class="section-title">How VoIP Works</h2>
+                <p class="section-desc">
+                    Watch this video to understand Voice over IP technology, UDP transport,
+                    and real-time audio codec compression concepts.
+                </p>
+            </div>
+            <div class="video-wrapper">
+                <div class="video-frame">
+                    <iframe src="https://www.youtube.com/embed/n_b2sJP2pBk"
+                        title="How VoIP Works" allowfullscreen
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════
+             4. LIVE DASHBOARD
+             ═══════════════════════════════════════════════════ -->
+        <section class="section" id="dashboard">
+            <div class="section-header">
+                <div class="section-label">Live Dashboard</div>
+                <h2 class="section-title">Real-Time VoIP Control</h2>
+                <p class="section-desc">
+                    Start the sender, receiver, or impairment proxy and monitor
+                    live network metrics in real time.
+                </p>
+            </div>
+
+            <!-- IP Display -->
+            <div style="text-align:center;margin-bottom:24px">
+                <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 20px;background:var(--bg-card);border:1px solid var(--border-glass);border-radius:30px;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">
+                    <span style="color:var(--text-muted)">Your IP</span>
+                    <span style="color:var(--accent-cyan)" id="local-ip">detecting…</span>
+                </div>
+            </div>
+
+            <!-- Role Tabs -->
+            <nav class="role-tabs" id="role-tabs" style="margin:0 auto 28px">
+                <button class="role-tab active" data-role="sender" id="tab-sender">
+                    🎙️ Sender <span class="status-dot" id="dot-sender"></span>
+                </button>
+                <button class="role-tab" data-role="receiver" id="tab-receiver">
+                    🔊 Receiver <span class="status-dot" id="dot-receiver"></span>
+                </button>
+                <button class="role-tab" data-role="proxy" id="tab-proxy">
+                    🌐 Proxy <span class="status-dot" id="dot-proxy"></span>
+                </button>
+            </nav>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- LEFT: Controls -->
+                <div class="control-panel">
+                    <div class="glass-card" id="controls-card">
+                        <div class="card-title"><span class="icon">⚙️</span> Control Panel</div>
+
+                        <!-- Sender -->
+                        <div id="sender-controls">
+                            <div class="form-group">
+                                <label class="form-label" for="sender-host">Receiver IP (PC B)</label>
+                                <input class="form-input" type="text" id="sender-host" placeholder="192.168.1.x">
+                            </div>
+                            <div class="form-row" style="margin-top:12px">
+                                <div class="form-group">
+                                    <label class="form-label" for="sender-port">Port</label>
+                                    <input class="form-input" type="number" id="sender-port" value="5004">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="sender-bitrate">Bitrate</label>
+                                    <select class="form-select" id="sender-bitrate">
+                                        <option value="20000">20 kbps</option>
+                                        <option value="12000" selected>12 kbps</option>
+                                        <option value="6000">6 kbps</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top:12px">
+                                <label class="form-label" for="sender-scenario">Scenario</label>
+                                <select class="form-select" id="sender-scenario">
+                                    <option>Scenario 1 - Same Room (0-1m)</option>
+                                    <option>Scenario 2 - Same Room with Obstacle (3-5m)</option>
+                                    <option>Scenario 3 - Different Rooms (1 wall)</option>
+                                    <option>Scenario 4 - Far Rooms / Multi-wall (10m+)</option>
+                                    <option>Scenario 5 - Simulated Emergency (via proxy)</option>
+                                </select>
+                            </div>
+                            <div class="btn-group" style="margin-top:16px">
+                                <button class="btn btn-start" id="btn-sender-start" onclick="startSender()">▶ Start</button>
+                                <button class="btn btn-stop" id="btn-sender-stop" onclick="stopSender()" disabled>◼ Stop</button>
+                            </div>
+                        </div>
+
+                        <!-- Receiver -->
+                        <div id="receiver-controls" style="display:none">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="recv-port">Listen Port</label>
+                                    <input class="form-input" type="number" id="recv-port" value="5004">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="recv-jitter">Jitter Buffer (ms)</label>
+                                    <input class="form-input" type="number" id="recv-jitter" value="60">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top:12px">
+                                <label class="form-label" for="recv-scenario">Scenario</label>
+                                <select class="form-select" id="recv-scenario">
+                                    <option>Scenario 1 - Same Room (0-1m)</option>
+                                    <option>Scenario 2 - Same Room with Obstacle (3-5m)</option>
+                                    <option>Scenario 3 - Different Rooms (1 wall)</option>
+                                    <option>Scenario 4 - Far Rooms / Multi-wall (10m+)</option>
+                                    <option>Scenario 5 - Simulated Emergency (via proxy)</option>
+                                </select>
+                            </div>
+
+                            <!-- ═══ TRANSCRIPTION TOGGLE ═══ -->
+                            <div class="stt-toggle-wrap" style="margin-top:16px">
+                                <div class="stt-toggle-row">
+                                    <div class="stt-toggle-info">
+                                        <span class="stt-icon">🎤</span>
+                                        <span class="stt-label">Live Transcription</span>
+                                    </div>
+                                    <label class="toggle-switch" for="stt-toggle">
+                                        <input type="checkbox" id="stt-toggle" onchange="toggleTranscription(this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="stt-hint">Convert received voice to text in real-time</div>
+                            </div>
+
+                            <div class="btn-group" style="margin-top:16px">
+                                <button class="btn btn-start" id="btn-recv-start" onclick="startReceiver()">▶ Start</button>
+                                <button class="btn btn-stop" id="btn-recv-stop" onclick="stopReceiver()" disabled>◼ Stop</button>
+                            </div>
+
+                            <!-- ═══ LIVE TRANSCRIPT PANEL ═══ -->
+                            <div class="stt-panel" id="stt-panel" style="display:none">
+                                <div class="stt-panel-header">
+                                    <div class="stt-panel-title">
+                                        <span class="stt-panel-icon">📝</span>
+                                        Live Transcript
+                                        <span class="stt-listening-dot" id="stt-listening-dot"></span>
+                                        <span class="stt-status-text" id="stt-status-text">Listening...</span>
+                                    </div>
+                                    <button class="stt-clear-btn" onclick="clearTranscript()" title="Clear transcript">🗑️</button>
+                                </div>
+                                <div class="stt-transcript-area" id="stt-transcript-area">
+                                    <div class="stt-placeholder" id="stt-placeholder">
+                                        Waiting for speech... Start speaking into the sender's microphone.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Proxy -->
+                        <div id="proxy-controls" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label" for="proxy-fwd-host">Forward to IP (PC B)</label>
+                                <input class="form-input" type="text" id="proxy-fwd-host" placeholder="192.168.1.x">
+                            </div>
+                            <div class="form-row" style="margin-top:12px">
+                                <div class="form-group">
+                                    <label class="form-label" for="proxy-listen-port">Listen Port</label>
+                                    <input class="form-input" type="number" id="proxy-listen-port" value="5005">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="proxy-fwd-port">Forward Port</label>
+                                    <input class="form-input" type="number" id="proxy-fwd-port" value="5004">
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-top:12px">
+                                <div class="form-group">
+                                    <label class="form-label" for="proxy-loss">Loss %</label>
+                                    <input class="form-input" type="number" id="proxy-loss" value="25" min="0" max="100">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="proxy-delay">Delay (ms)</label>
+                                    <input class="form-input" type="number" id="proxy-delay" value="80" min="0">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top:12px">
+                                <label class="form-label" for="proxy-jitter">Jitter ± (ms)</label>
+                                <input class="form-input" type="number" id="proxy-jitter" value="30" min="0">
+                            </div>
+                            <div class="btn-group" style="margin-top:16px">
+                                <button class="btn btn-start" id="btn-proxy-start" onclick="startProxy()">▶ Start</button>
+                                <button class="btn btn-stop" id="btn-proxy-stop" onclick="stopProxy()" disabled>◼ Stop</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Architecture -->
+                    <div class="glass-card">
+                        <div class="card-title"><span class="icon">🏗️</span> Protocol Stack</div>
+                        <div class="arch-diagram">PC A (<span class="hl">Sender</span>)
+  Mic → PyAudio → OPUS Enc
+  → [seq|ts|codec|payload]
+  → UDP Socket TX
+        │
+    ── Network ──
+        │
+PC B (<span class="hl">Receiver</span>)
+  UDP Socket RX
+  → Jitter Buffer
+  → OPUS Decoder → Speaker</div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Metrics -->
+                <div class="metrics-area">
+                    <div class="metrics-grid">
+                        <div class="metric-card c-indigo">
+                            <div class="metric-label">Packets Sent</div>
+                            <div class="metric-value neutral" id="m-pkts-sent">—</div>
+                            <div class="metric-unit">packets</div>
+                        </div>
+                        <div class="metric-card c-cyan">
+                            <div class="metric-label">Packets Received</div>
+                            <div class="metric-value neutral" id="m-pkts-recv">—</div>
+                            <div class="metric-unit">packets</div>
+                        </div>
+                        <div class="metric-card c-emerald">
+                            <div class="metric-label">Packet Loss</div>
+                            <div class="metric-value good" id="m-loss">—</div>
+                            <div class="metric-unit">percent</div>
+                        </div>
+                        <div class="metric-card c-amber">
+                            <div class="metric-label">Avg Latency</div>
+                            <div class="metric-value neutral" id="m-latency">—</div>
+                            <div class="metric-detail" id="m-latency-range">min — / max —</div>
+                        </div>
+                        <div class="metric-card c-rose">
+                            <div class="metric-label">Jitter</div>
+                            <div class="metric-value neutral" id="m-jitter">—</div>
+                            <div class="metric-unit">ms</div>
+                        </div>
+                        <div class="metric-card c-violet">
+                            <div class="metric-label">MOS Score</div>
+                            <div class="mos-gauge-container">
+                                <div class="mos-ring">
+                                    <svg viewBox="0 0 72 72">
+                                        <circle class="bg-ring" cx="36" cy="36" r="30"></circle>
+                                        <circle class="fg-ring" id="mos-arc" cx="36" cy="36" r="30"
+                                            stroke-dasharray="188.5" stroke-dashoffset="188.5"
+                                            stroke="var(--accent-primary)"></circle>
+                                    </svg>
+                                    <div class="mos-text" id="m-mos">—</div>
+                                </div>
+                                <div>
+                                    <div class="metric-unit" id="m-mos-label">No data</div>
+                                    <div class="metric-detail" id="m-bitrate">— kbps</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Chart -->
+                    <div class="glass-card">
+                        <div class="card-title"><span class="icon">📈</span> Real-Time Metrics</div>
+                        <div class="chart-container">
+                            <canvas id="live-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Console & Reports -->
+            <div class="bottom-grid">
+                <div class="glass-card">
+                    <div class="card-title"><span class="icon">🖥️</span> Console Log</div>
+                    <div class="console-log" id="console-log">
+                        <div class="log-line">
+                            <span class="log-ts">--:--:--</span>
+                            <span class="log-msg info">Dashboard initialized. Waiting for connection…</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="card-title"><span class="icon">📋</span> Saved Reports</div>
+                    <div class="reports-list" id="reports-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════
+             5. VIRTUAL LAB REFERENCE
+             ═══════════════════════════════════════════════════ -->
+        <section class="section" id="virtual-lab">
+            <div class="section-header">
+                <div class="section-label">Virtual Lab</div>
+                <h2 class="section-title">Virtual Lab Reference</h2>
+                <p class="section-desc">
+                    Explore similar networking concepts through interactive virtual lab experiments.
+                </p>
+            </div>
+            <div class="ref-grid">
+                <a class="ref-card" href="https://vlabs.iitkgp.ac.in/cn.html" target="_blank">
+                    <div class="ref-type">Virtual Lab</div>
+                    <div class="ref-title">IIT Kharagpur — Computer Networks Lab</div>
+                    <div class="ref-desc">Interactive experiments on socket programming, UDP/TCP, and network protocols.</div>
+                    <div class="ref-link">Visit Lab →</div>
+                </a>
+                <a class="ref-card" href="https://www.vlab.co.in/broad-area-computer-science-and-engineering" target="_blank">
+                    <div class="ref-type">Virtual Lab</div>
+                    <div class="ref-title">Virtual Labs — Computer Science</div>
+                    <div class="ref-desc">Government of India initiative for online labs covering networking, OS, and more.</div>
+                    <div class="ref-link">Explore →</div>
+                </a>
+                <a class="ref-card" href="https://gaia.cs.umass.edu/kurose_ross/wireshark.php" target="_blank">
+                    <div class="ref-type">Hands-On</div>
+                    <div class="ref-title">Wireshark Labs — Kurose & Ross</div>
+                    <div class="ref-desc">Packet capture labs for UDP, TCP, DNS, HTTP — companion to the CN textbook.</div>
+                    <div class="ref-link">Try Labs →</div>
+                </a>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ═══════════════════════════════════════════════════
+             6. REFERENCES
+             ═══════════════════════════════════════════════════ -->
+        <section class="section" id="references">
+            <div class="section-header">
+                <div class="section-label">Further Reading</div>
+                <h2 class="section-title">References</h2>
+                <p class="section-desc">
+                    Textbook references, official documentation, and research papers for deeper understanding.
+                </p>
+            </div>
+            <div class="ref-grid">
+                <a class="ref-card" href="https://gaia.cs.umass.edu/kurose_ross/index.php" target="_blank">
+                    <div class="ref-type">📚 Textbook</div>
+                    <div class="ref-title">Computer Networking: A Top-Down Approach</div>
+                    <div class="ref-desc">Kurose & Ross — Chapter 3 (Transport Layer: UDP) and Chapter 9 (Multimedia Networking, VoIP). The prescribed CN textbook.</div>
+                    <div class="ref-link">See Book →</div>
+                </a>
+                <a class="ref-card" href="https://datatracker.ietf.org/doc/html/rfc6716" target="_blank">
+                    <div class="ref-type">📄 RFC / Standard</div>
+                    <div class="ref-title">RFC 6716 — Definition of the Opus Audio Codec</div>
+                    <div class="ref-desc">IETF standard specification for the Opus codec used in this project for low-bitrate voice encoding.</div>
+                    <div class="ref-link">Read RFC →</div>
+                </a>
+                <a class="ref-card" href="https://datatracker.ietf.org/doc/html/rfc768" target="_blank">
+                    <div class="ref-type">📄 RFC / Standard</div>
+                    <div class="ref-title">RFC 768 — User Datagram Protocol (UDP)</div>
+                    <div class="ref-desc">The original UDP specification — the core transport layer protocol used for real-time voice transmission.</div>
+                    <div class="ref-link">Read RFC →</div>
+                </a>
+                <a class="ref-card" href="https://docs.python.org/3/library/socket.html" target="_blank">
+                    <div class="ref-type">🌐 Documentation</div>
+                    <div class="ref-title">Python Socket Programming — Official Docs</div>
+                    <div class="ref-desc">Official Python documentation for the socket module used to implement raw UDP datagram communication.</div>
+                    <div class="ref-link">View Docs →</div>
+                </a>
+                <a class="ref-card" href="https://opus-codec.org/" target="_blank">
+                    <div class="ref-type">🌐 Official Website</div>
+                    <div class="ref-title">Opus Codec — Official Site</div>
+                    <div class="ref-desc">Official website of the Opus audio codec with documentation, comparison charts, and implementation references.</div>
+                    <div class="ref-link">Visit →</div>
+                </a>
+                <a class="ref-card" href="https://www.itu.int/rec/T-REC-G.107-201506-I/en" target="_blank">
+                    <div class="ref-type">📄 Research / ITU</div>
+                    <div class="ref-title">ITU-T G.107 — E-Model for MOS Estimation</div>
+                    <div class="ref-desc">The ITU E-Model standard used to estimate Mean Opinion Score (MOS) from network metrics like latency, jitter, and loss.</div>
+                    <div class="ref-link">View Standard →</div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════
+             FOOTER
+             ═══════════════════════════════════════════════════ -->
+        <footer class="footer">
+            <div class="footer-brand">Emergency VoIP System</div>
+            <div class="footer-text">
+                Low-Bandwidth Voice Communication for Smart Cities<br>
+                Computer Networks Project · Socket Programming · OPUS Codec
+            </div>
+            <div class="footer-links">
+                <a href="#learn">Learn</a>
+                <a href="#simulation">Simulation</a>
+                <a href="#dashboard">Dashboard</a>
+                <a href="#video">Video</a>
+                <a href="#references">References</a>
+                <a href="#" onclick="openDevModal();return false">Developed by</a>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ═══ MODALS ═══ -->
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="report-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-scenario">Report</div>
+                <button class="modal-close" onclick="closeModal('report-modal')">✕</button>
+            </div>
+            <div class="modal-metrics" id="modal-metrics"></div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="help-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">❓ Help & Instructions</div>
+                <button class="modal-close" onclick="closeModal('help-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Getting Started:</strong></p>
+                <p>1. Both PCs must be on the same WiFi/LAN network.<br>
+                   2. Start the <strong>Receiver</strong> on PC B first (click Dashboard → Receiver → Start).<br>
+                   3. Start the <strong>Sender</strong> on PC A with PC B's IP address.<br>
+                   4. Speak into the microphone — audio streams in real time.</p>
+                <br>
+                <p><strong>Impairment Proxy:</strong> Simulates packet loss, delay, and jitter.</p>
+                <p><strong>Simulation Tab:</strong> Visualize how UDP packets travel from sender to receiver.</p>
+                <br>
+                <p><strong>Troubleshooting:</strong></p>
+                <p>• Allow UDP port 5004 through your firewall<br>
+                   • Install dependencies: <code>pip install pyaudio opuslib</code><br>
+                   • Windows: Download <code>opus.dll</code> to the project directory</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developed By Modal -->
+    <div class="modal-overlay" id="dev-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">👨‍💻 Developed By</div>
+                <button class="modal-close" onclick="closeModal('dev-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align:center;font-size:1.1rem;margin-bottom:16px">
+                    <strong>Low-Bandwidth Emergency VoIP System</strong>
+                </p>
+                <p style="text-align:center;color:var(--text-muted);margin-bottom:24px">
+                    Computer Networks Project<br>
+                    Socket Programming · UDP · OPUS Codec
+                </p>
+                <p style="text-align:center">
+                    <strong>Student Name(s):</strong> Karan Veer Singh, Krish Jain<br>
+                    <strong>Registration Number(s):</strong> 24BYB1164, 24BYB1120<br>
+                    <strong>Course:</strong> Computer Networks<br>
+                    <strong>Institution:</strong> VIT Chennai
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/app.js?v=2"></script>
+</body>
+</html>

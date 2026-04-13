@@ -1,0 +1,13 @@
+{
+  "scenario": "Test",
+  "packets_sent": 211,
+  "packets_recv": 0,
+  "packet_loss_pct": 100.0,
+  "latency_avg_ms": 0,
+  "latency_min_ms": 0,
+  "latency_max_ms": 0,
+  "jitter_ms": 0,
+  "bitrate_kbps": 0.0,
+  "mos_estimate": 1.0,
+  "duration_s": 4.9
+}

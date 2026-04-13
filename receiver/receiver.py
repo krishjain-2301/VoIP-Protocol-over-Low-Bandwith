@@ -15,7 +15,11 @@ import signal
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-import pyaudio
+try:
+    import pyaudio
+except ImportError:
+    pyaudio = None
+
 try:
     import opuslib
     OPUS_AVAILABLE = True

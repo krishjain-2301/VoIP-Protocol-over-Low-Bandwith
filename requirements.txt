@@ -1,5 +1,12 @@
-pyaudio
+# Local hardware dependencies
+pyaudio; sys_platform == "win32" or sys_platform == "darwin"
 opuslib
+
+# Web dependencies
 flask
 flask-socketio
 SpeechRecognition
+
+# Production Server (for Render)
+gunicorn
+eventlet
